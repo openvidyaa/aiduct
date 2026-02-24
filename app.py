@@ -60,7 +60,10 @@ def generate_proposal():
         })
 
     except Exception as e:
+        import traceback
         print(f"Error generating proposal: {str(e)}")
+        print(f"Full traceback:")
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 @app.route('/download/<filename>')
@@ -164,7 +167,10 @@ Only return the JSON, no additional text.
         return proposal_data
 
     except Exception as e:
+        import traceback
         print(f"AI Error: {str(e)}")
+        print(f"AI Error Traceback:")
+        traceback.print_exc()
         # Fallback to conservative estimates if AI fails
         return {
             **data,
