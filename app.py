@@ -110,7 +110,7 @@ Please calculate and provide:
 8. A compelling 2-3 sentence value proposition for this specific customer
 
 Return your response as a valid JSON object with these exact keys:
-{
+{{
   "current_leakage_pct": number,
   "expected_savings_pct": number,
   "annual_savings": number,
@@ -119,7 +119,7 @@ Return your response as a valid JSON object with these exact keys:
   "ten_year_savings": number,
   "co2_reduction_lbs": number,
   "value_proposition": "string"
-}
+}}
 
 Only return the JSON, no additional text.
 """
