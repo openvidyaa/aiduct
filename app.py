@@ -139,6 +139,15 @@ Only return the JSON, no additional text.
         # Parse AI response
         ai_result = json.loads(response.choices[0].message.content)
 
+        # Ensure all numeric values are floats (AI might return strings)
+        ai_result['current_leakage_pct'] = float(ai_result.get('current_leakage_pct', 30))
+        ai_result['expected_savings_pct'] = float(ai_result.get('expected_savings_pct', 25))
+        ai_result['annual_savings'] = float(ai_result.get('annual_savings', annual_energy_cost * 0.25))
+        ai_result['project_cost'] = float(ai_result.get('project_cost', 3000))
+        ai_result['payback_years'] = float(ai_result.get('payback_years', 3.5))
+        ai_result['ten_year_savings'] = float(ai_result.get('ten_year_savings', annual_energy_cost * 0.25 * 10))
+        ai_result['co2_reduction_lbs'] = float(ai_result.get('co2_reduction_lbs', 5000))
+
         # Combine input data with AI calculations
         proposal_data = {
             **data,
