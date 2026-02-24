@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["python313", "gcc"]
+
+[phases.install]
+cmds = [
+  "python -m venv --copies /opt/venv",
+  ". /opt/venv/bin/activate && pip install -r requirements.txt"
+]
+
+[start]
+cmd = ". /opt/venv/bin/activate && gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120"
