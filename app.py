@@ -175,7 +175,7 @@ Only return the JSON, no additional text.
             'payback_years': 3.5,
             'ten_year_savings': annual_energy_cost * 0.25 * 10,
             'co2_reduction_lbs': 5000,
-            'value_proposition': f"Aeroseal duct sealing can reduce your energy costs by an estimated 25%, saving approximately ${annual_energy_cost * 0.25:,.0f} annually while improving comfort and air quality.",
+            'value_proposition': f"Aeroseal duct sealing can reduce your energy costs by an estimated 25%, saving approximately ${annual_energy_cost * 0.25:.0f} annually while improving comfort and air quality.",
             'annual_energy_cost': annual_energy_cost,
             'date_generated': datetime.now().strftime('%B %d, %Y'),
             'executive_summary': "Professional energy efficiency analysis",
