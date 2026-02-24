@@ -102,7 +102,7 @@ def generate_proposal_pdf(data, output_path):
     highlights_data = [
         ['Metric', 'Value'],
         ['Building Type', data['buildingType']],
-        ['Building Size', f"{data['sqft']:,} sq ft"],
+        ['Building Size', f"{int(data['sqft'])} sq ft"],
         ['Current Annual Energy Cost', f"${data['annual_energy_cost']:.2f}"],
         ['Projected Annual Savings', f"${data['annual_savings']:.2f}"],
         ['Savings Percentage', f"{data['expected_savings_pct']:.1f}%"],
