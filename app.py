@@ -176,12 +176,17 @@ Only return the JSON, no additional text.
 
 def generate_executive_summary(data):
     """Generate executive summary using AI"""
+    # Convert to float to ensure proper formatting
+    annual_savings = float(data['annual_savings'])
+    payback_years = float(data['payback_years'])
+    co2_reduction = float(data['co2_reduction_lbs'])
+
     prompt = f"""
 Create a compelling executive summary (2-3 paragraphs) for an Aeroseal duct sealing proposal with these highlights:
 - Building: {data['buildingType']}, {data['sqft']} sq ft
-- Annual savings: ${data['annual_savings']:,.0f}
-- Payback: {data['payback_years']:.1f} years
-- CO2 reduction: {data['co2_reduction_lbs']:,.0f} lbs/year
+- Annual savings: ${annual_savings:,.0f}
+- Payback: {payback_years:.1f} years
+- CO2 reduction: {co2_reduction:,.0f} lbs/year
 
 Make it professional, benefit-focused, and persuasive. Focus on comfort, savings, and environmental impact.
 """
@@ -198,11 +203,11 @@ Make it professional, benefit-focused, and persuasive. Focus on comfort, savings
         )
         return response.choices[0].message.content.strip()
     except:
-        return f"This proposal outlines a comprehensive duct sealing solution for your {data['buildingType']}. Through Aeroseal's proven technology, we project annual energy savings of ${data['annual_savings']:,.0f}, with a payback period of {data['payback_years']:.1f} years. Beyond financial savings, you'll experience improved comfort, better indoor air quality, and a significant reduction in your carbon footprint."
+        return f"This proposal outlines a comprehensive duct sealing solution for your {data['buildingType']}. Through Aeroseal's proven technology, we project annual energy savings of ${annual_savings:,.0f}, with a payback period of {payback_years:.1f} years. Beyond financial savings, you'll experience improved comfort, better indoor air quality, and a significant reduction in your carbon footprint."
 
 def generate_environmental_impact(data):
     """Generate environmental impact description"""
-    co2_lbs = data['co2_reduction_lbs']
+    co2_lbs = float(data['co2_reduction_lbs'])
     trees_equivalent = co2_lbs / 48  # One tree absorbs ~48 lbs CO2/year
 
     return f"By sealing your duct system, you'll prevent approximately {co2_lbs:,.0f} pounds of CO2 from entering the atmosphere each year. This is equivalent to planting {trees_equivalent:.0f} trees or taking a car off the road for {co2_lbs/11000:.1f} months. Over 10 years, your cumulative environmental impact equals {co2_lbs*10/2000:.1f} tons of CO2 prevented."

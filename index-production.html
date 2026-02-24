@@ -413,7 +413,7 @@
             <div id="loading" class="loading">
                 <div class="spinner"></div>
                 <h3 style="color: #1e3a8a; margin-bottom: 10px;">Generating Your Proposal...</h3>
-                <p style="color: #6b7280;">AI is calculating energy savings, researching incentives, and creating a professional document</p>
+                <p id="loadingMessage" style="color: #6b7280;">AI is calculating energy savings, researching incentives, and creating a professional document</p>
             </div>
 
             <div id="result" class="result">
@@ -442,6 +442,31 @@
         // ⚙️ CONFIGURATION - Railway backend URL
         const API_URL = 'https://aiduct-production.up.railway.app';
 
+        // Dynamic loading messages
+        const loadingMessages = [
+            "Analyzing building specifications and energy usage patterns...",
+            "Calculating potential duct leakage based on building age...",
+            "AI is estimating annual energy savings...",
+            "Computing ROI and payback periods...",
+            "Researching local energy incentives and rebates...",
+            "Calculating environmental impact and CO₂ reduction...",
+            "Generating executive summary and value proposition...",
+            "Creating professional PDF proposal with charts...",
+            "Finalizing 10-year financial projections...",
+            "Almost done! Compiling your personalized proposal..."
+        ];
+
+        let loadingMessageIndex = 0;
+        let loadingInterval = null;
+
+        function rotateLoadingMessages() {
+            const messageEl = document.getElementById('loadingMessage');
+            if (messageEl) {
+                messageEl.textContent = loadingMessages[loadingMessageIndex];
+                loadingMessageIndex = (loadingMessageIndex + 1) % loadingMessages.length;
+            }
+        }
+
         document.getElementById('proposalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -457,6 +482,11 @@
             document.getElementById('loading').classList.add('active');
             document.getElementById('generateBtn').disabled = true;
 
+            // Start rotating loading messages
+            loadingMessageIndex = 0;
+            rotateLoadingMessages();
+            loadingInterval = setInterval(rotateLoadingMessages, 3000); // Change every 3 seconds
+
             try {
                 const response = await fetch(`${API_URL}/api/generate-proposal`, {
                     method: 'POST',
@@ -471,6 +501,9 @@
                 }
 
                 const result = await response.json();
+
+                // Stop loading messages
+                clearInterval(loadingInterval);
 
                 // Hide loading
                 document.getElementById('loading').classList.remove('active');
@@ -497,6 +530,9 @@
                 document.getElementById('generateBtn').disabled = false;
 
             } catch (error) {
+                // Stop loading messages
+                clearInterval(loadingInterval);
+
                 document.getElementById('loading').classList.remove('active');
                 const errorDiv = document.getElementById('error');
                 errorDiv.textContent = 'Error: ' + error.message + '. Please try again or contact support.';
