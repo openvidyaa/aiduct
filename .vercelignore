@@ -1,0 +1,12 @@
+app.py
+proposal_generator.py
+requirements.txt
+Procfile
+runtime.txt
+.env
+.env.example
+proposals/
+__pycache__/
+*.pyc
+*.py
+railway.json.backup
