@@ -220,16 +220,108 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                border-radius: 12px;
+            }
+
             .form-row {
                 grid-template-columns: 1fr;
             }
 
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header .logo {
+                font-size: 40px;
+                margin-bottom: 10px;
+            }
+
             .header h1 {
-                font-size: 24px;
+                font-size: 22px;
+                margin-bottom: 8px;
+            }
+
+            .header .tagline {
+                font-size: 14px;
             }
 
             .form-container {
+                padding: 25px 15px;
+            }
+
+            .form-section {
+                margin-bottom: 25px;
+            }
+
+            .form-section h2 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+            label {
+                font-size: 13px;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="email"],
+            select {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .generate-btn {
+                padding: 15px;
+                font-size: 16px;
+                letter-spacing: 0.5px;
+            }
+
+            .result {
                 padding: 30px 20px;
+            }
+
+            .result h3 {
+                font-size: 20px;
+            }
+
+            .result p {
+                font-size: 14px;
+            }
+
+            .preview-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 20px;
+                padding-top: 20px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card .number {
+                font-size: 20px;
+            }
+
+            .stat-card .label {
+                font-size: 11px;
+            }
+
+            .loading {
+                padding: 30px 15px;
+            }
+
+            .loading h3 {
+                font-size: 18px;
+            }
+
+            #loadingMessage {
+                font-size: 14px;
             }
         }
 
