@@ -103,12 +103,12 @@ def generate_proposal_pdf(data, output_path):
         ['Metric', 'Value'],
         ['Building Type', data['buildingType']],
         ['Building Size', f"{data['sqft']:,} sq ft"],
-        ['Current Annual Energy Cost', f"${data['annual_energy_cost']:,.2f}"],
-        ['Projected Annual Savings', f"${data['annual_savings']:,.2f}"],
+        ['Current Annual Energy Cost', f"${data['annual_energy_cost']:.2f}"],
+        ['Projected Annual Savings', f"${data['annual_savings']:.2f}"],
         ['Savings Percentage', f"{data['expected_savings_pct']:.1f}%"],
         ['Simple Payback Period', f"{data['payback_years']:.1f} years"],
-        ['10-Year Cumulative Savings', f"${data['ten_year_savings']:,.2f}"],
-        ['CO₂ Reduction (Annual)', f"{data['co2_reduction_lbs']:,.0f} lbs"],
+        ['10-Year Cumulative Savings', f"${data['ten_year_savings']:.2f}"],
+        ['CO₂ Reduction (Annual)', f"{data['co2_reduction_lbs']:.0f} lbs"],
     ]
 
     highlights_table = Table(highlights_data, colWidths=[3*inch, 2.5*inch])
@@ -141,7 +141,7 @@ def generate_proposal_pdf(data, output_path):
     • Excessive dust and allergens<br/>
     • Overworked HVAC equipment<br/>
     <br/>
-    Your current HVAC system, which is {data['hvacAge']} years old, is working harder than necessary to compensate for these leaks, resulting in an estimated annual energy cost of <b>${data['annual_energy_cost']:,.2f}</b>.
+    Your current HVAC system, which is {data['hvacAge']} years old, is working harder than necessary to compensate for these leaks, resulting in an estimated annual energy cost of <b>${data['annual_energy_cost']:.2f}</b>.
     """
 
     story.append(Paragraph(problem_text, body_style))
@@ -153,7 +153,7 @@ def generate_proposal_pdf(data, output_path):
     solution_text = f"""
     Aeroseal's patented technology will seal your duct leaks from the inside out, dramatically reducing energy waste and improving comfort. We expect to achieve approximately <b>{data['expected_savings_pct']:.0f}% reduction in duct leakage</b>, resulting in:
     <br/><br/>
-    • <b>${data['annual_savings']:,.2f}</b> in annual energy savings<br/>
+    • <b>${data['annual_savings']:.2f}</b> in annual energy savings<br/>
     • Improved comfort and temperature consistency<br/>
     • Better indoor air quality<br/>
     • Extended HVAC equipment lifespan<br/>
@@ -169,13 +169,13 @@ def generate_proposal_pdf(data, output_path):
     # Cost breakdown table
     cost_data = [
         ['Item', 'Amount'],
-        ['Aeroseal Duct Sealing Service', f"${data['project_cost']:,.2f}"],
+        ['Aeroseal Duct Sealing Service', f"${data['project_cost']:.2f}"],
         ['Less: Available Rebates/Incentives', f"TBD*"],
-        ['Net Investment', f"${data['project_cost']:,.2f}"],
+        ['Net Investment', f"${data['project_cost']:.2f}"],
         ['', ''],
-        ['Annual Energy Savings', f"${data['annual_savings']:,.2f}"],
+        ['Annual Energy Savings', f"${data['annual_savings']:.2f}"],
         ['Simple Payback Period', f"{data['payback_years']:.1f} years"],
-        ['10-Year Return on Investment', f"${data['ten_year_savings']:,.2f}"],
+        ['10-Year Return on Investment', f"${data['ten_year_savings']:.2f}"],
         ['ROI Percentage (10 years)', f"{(data['ten_year_savings']/data['project_cost']*100):.0f}%"],
     ]
 
@@ -215,7 +215,7 @@ def generate_proposal_pdf(data, output_path):
     cumulative = 0
     for year in range(1, 11):
         cumulative += data['annual_savings']
-        projection_data.append([f"Year {year}", f"${cumulative:,.2f}"])
+        projection_data.append([f"Year {year}", f"${cumulative:.2f}"])
 
     projection_table = Table(projection_data, colWidths=[1.5*inch, 2*inch])
     projection_table.setStyle(TableStyle([
@@ -241,7 +241,7 @@ def generate_proposal_pdf(data, output_path):
     # Environmental stats
     env_data = [
         ['Environmental Benefit', 'Annual Impact'],
-        ['CO₂ Reduction', f"{data['co2_reduction_lbs']:,.0f} lbs"],
+        ['CO₂ Reduction', f"{data['co2_reduction_lbs']:.0f} lbs"],
         ['Equivalent Trees Planted', f"{data['co2_reduction_lbs']/48:.0f} trees"],
         ['10-Year CO₂ Prevention', f"{data['co2_reduction_lbs']*10/2000:.1f} tons"],
     ]
