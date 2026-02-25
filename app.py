@@ -27,6 +27,13 @@ def generate_proposal():
     try:
         data = request.json
 
+        # Debug: Check if Step 0 data is present
+        print(f"📥 Received proposal request")
+        if 'price_multiplier' in data:
+            print(f"✅ Step 0 data found: multiplier={data.get('price_multiplier')}, complexity={data.get('complexity_score')}, risk={data.get('risk_level')}")
+        else:
+            print(f"⚠️  No Step 0 data in request")
+
         # Validate required fields
         required_fields = ['address', 'buildingType', 'sqft', 'yearBuilt', 'hvacAge',
                           'hvacType', 'summerBill', 'winterBill', 'ductLocation',
@@ -38,6 +45,15 @@ def generate_proposal():
 
         # Calculate energy savings and generate proposal content using AI
         proposal_data = calculate_energy_savings(data)
+
+        # Debug: Verify Step 0 data made it through
+        print(f"📤 Proposal data has_step0_data: {proposal_data.get('has_step0_data')}")
+        if proposal_data.get('has_step0_data'):
+            print(f"   - Complexity: {proposal_data.get('step0_complexity_score')}")
+            print(f"   - Risk: {proposal_data.get('step0_risk_level')}")
+            print(f"   - Multiplier: {proposal_data.get('applied_multiplier')}")
+            print(f"   - Base cost: {proposal_data.get('base_cost')}")
+            print(f"   - Final cost: {proposal_data.get('project_cost')}")
 
         # Generate PDF
         pdf_filename = f"aeroseal_proposal_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
@@ -324,12 +340,27 @@ Only return the JSON, no additional text.
         ai_result['ten_year_savings'] = float(ai_result.get('ten_year_savings', annual_energy_cost * 0.25 * 10))
         ai_result['co2_reduction_lbs'] = float(ai_result.get('co2_reduction_lbs', 5000))
 
+        # Apply Step 0 pricing multiplier if provided
+        if 'price_multiplier' in data:
+            base_cost = ai_result['project_cost']
+            multiplier = float(data['price_multiplier'])
+            ai_result['project_cost'] = base_cost * multiplier
+            ai_result['base_cost'] = base_cost  # Save original for transparency
+            ai_result['applied_multiplier'] = multiplier
+            # Recalculate payback with adjusted price
+            ai_result['payback_years'] = ai_result['project_cost'] / ai_result['annual_savings']
+            print(f"✅ Applied Step 0 pricing multiplier: {multiplier}x (${base_cost:.0f} → ${ai_result['project_cost']:.0f})")
+
         # Combine input data with AI calculations
         proposal_data = {
             **data,
             **ai_result,
             'annual_energy_cost': annual_energy_cost,
-            'date_generated': datetime.now().strftime('%B %d, %Y')
+            'date_generated': datetime.now().strftime('%B %d, %Y'),
+            # Pass through Step 0 data if available
+            'has_step0_data': 'price_multiplier' in data,
+            'step0_complexity_score': data.get('complexity_score'),
+            'step0_risk_level': data.get('risk_level')
         }
 
         # Generate additional content using AI
@@ -345,21 +376,34 @@ Only return the JSON, no additional text.
         print(f"AI Error Traceback:")
         traceback.print_exc()
         # Fallback to conservative estimates if AI fails
+        fallback_cost = 3000 if data['buildingType'] == 'Single Family Home' else 15000
+        annual_savings = annual_energy_cost * 0.25
+
+        # Apply Step 0 pricing multiplier to fallback as well
+        if 'price_multiplier' in data:
+            base_cost = fallback_cost
+            multiplier = float(data['price_multiplier'])
+            fallback_cost = base_cost * multiplier
+            print(f"✅ Applied Step 0 multiplier to fallback: {multiplier}x (${base_cost:.0f} → ${fallback_cost:.0f})")
+
         return {
             **data,
             'current_leakage_pct': 30,
             'expected_savings_pct': 25,
-            'annual_savings': annual_energy_cost * 0.25,
-            'project_cost': 3000 if data['buildingType'] == 'Single Family Home' else 15000,
-            'payback_years': 3.5,
-            'ten_year_savings': annual_energy_cost * 0.25 * 10,
+            'annual_savings': annual_savings,
+            'project_cost': fallback_cost,
+            'payback_years': fallback_cost / annual_savings,
+            'ten_year_savings': annual_savings * 10,
             'co2_reduction_lbs': 5000,
-            'value_proposition': f"Aeroseal duct sealing can reduce your energy costs by an estimated 25%, saving approximately ${annual_energy_cost * 0.25:.0f} annually while improving comfort and air quality.",
+            'value_proposition': f"Aeroseal duct sealing can reduce your energy costs by an estimated 25%, saving approximately ${annual_savings:.0f} annually while improving comfort and air quality.",
             'annual_energy_cost': annual_energy_cost,
             'date_generated': datetime.now().strftime('%B %d, %Y'),
             'executive_summary': "Professional energy efficiency analysis",
             'process_description': get_aeroseal_process_description(),
-            'environmental_impact': f"Reduce your carbon footprint by approximately 5,000 lbs of CO2 annually."
+            'environmental_impact': f"Reduce your carbon footprint by approximately 5,000 lbs of CO2 annually.",
+            'has_step0_data': 'price_multiplier' in data,
+            'step0_complexity_score': data.get('complexity_score'),
+            'step0_risk_level': data.get('risk_level')
         }
 
 def generate_executive_summary(data):

@@ -745,9 +745,81 @@
                 insightsList.appendChild(item);
             });
 
+            // Save to localStorage for Step 1 integration
+            saveJobDataToLocalStorage(data);
+
             // Re-enable button for another analysis
             analyzeBtn.disabled = false;
         }
+
+        // Save job assessment data to localStorage
+        function saveJobDataToLocalStorage(assessmentData) {
+            const jobData = {
+                step0: {
+                    buildingInfo: {
+                        buildingType: document.getElementById('buildingType').value,
+                        sqft: parseInt(document.getElementById('sqft').value),
+                        yearBuilt: document.getElementById('yearBuilt').value || 'Unknown',
+                        floors: document.getElementById('floors').value || '1'
+                    },
+                    assessment: {
+                        complexity_score: assessmentData.complexity_score,
+                        crew_size: assessmentData.crew_size,
+                        estimated_time: assessmentData.estimated_time,
+                        price_multiplier: assessmentData.price_multiplier,
+                        risk_level: assessmentData.risk_level,
+                        insights: assessmentData.insights
+                    },
+                    timestamp: new Date().toISOString()
+                }
+            };
+
+            // Save to localStorage
+            localStorage.setItem('aeroseal_job_data', JSON.stringify(jobData));
+            console.log('✅ Job data saved to localStorage:', jobData);
+
+            // Show success notification
+            showNotification('✅ Job assessment saved! Data will flow to Step 1 (Proposal Generation)');
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

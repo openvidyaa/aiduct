@@ -127,6 +127,40 @@ def generate_proposal_pdf(data, output_path):
     ]))
 
     story.append(highlights_table)
+    story.append(Spacer(1, 0.3*inch))
+
+    # Add Step 0 AI Job Assessment section if available
+    if data.get('has_step0_data'):
+        ai_assessment_style = ParagraphStyle(
+            'AIAssessment',
+            parent=body_style,
+            fontSize=10,
+            textColor=AEROSEAL_BLUE,
+            alignment=TA_CENTER,
+            spaceAfter=8
+        )
+
+        story.append(Paragraph("🧠 <b>AI Job Assessment Applied</b>", ai_assessment_style))
+
+        assessment_text = f"""
+        <para alignment="center" fontSize="9" textColor="#6b7280">
+        This proposal includes intelligent pricing based on our AI-powered job assessment.<br/>
+        Complexity Score: <b>{data.get('step0_complexity_score', 'N/A')}/10</b> |
+        Risk Level: <b>{data.get('step0_risk_level', 'N/A')}</b> |
+        Price Multiplier: <b>{data.get('applied_multiplier', 1.0):.2f}x</b>
+        </para>
+        """
+        story.append(Paragraph(assessment_text, body_style))
+
+        # Show base cost vs adjusted cost if multiplier was applied
+        if data.get('applied_multiplier') and data.get('applied_multiplier') != 1.0:
+            pricing_note = f"""
+            <para alignment="center" fontSize="9" textColor="#059669" backColor="#ecfdf5" leftIndent="10" rightIndent="10">
+            <i>Base cost: ${data.get('base_cost', 0):.2f} × {data.get('applied_multiplier', 1.0):.2f} complexity multiplier = ${data['project_cost']:.2f}</i>
+            </para>
+            """
+            story.append(Paragraph(pricing_note, body_style))
+
     story.append(PageBreak())
 
     # Problem Statement

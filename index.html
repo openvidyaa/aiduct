@@ -1001,6 +1001,20 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
+            // Check if we have Step 0 data with pricing multiplier
+            const jobData = loadJobDataFromLocalStorage();
+            if (jobData && jobData.step0 && jobData.step0.assessment) {
+                data.price_multiplier = jobData.step0.assessment.price_multiplier;
+                data.complexity_score = jobData.step0.assessment.complexity_score;
+                data.risk_level = jobData.step0.assessment.risk_level;
+                console.log('✅ Attaching Step 0 data to proposal request:');
+                console.log('   - Price Multiplier:', data.price_multiplier);
+                console.log('   - Complexity Score:', data.complexity_score);
+                console.log('   - Risk Level:', data.risk_level);
+            } else {
+                console.log('⚠️ No Step 0 data found in localStorage');
+            }
+
             // Hide any previous errors
             document.getElementById('error').classList.remove('active');
             document.getElementById('result').classList.remove('active');
@@ -1065,6 +1079,120 @@
                 errorDiv.textContent = 'Error: ' + error.message + '. Please try again or contact support.';
                 errorDiv.classList.add('active');
                 document.getElementById('generateBtn').disabled = false;
+            }
+        });
+
+        // Load job data from localStorage
+        function loadJobDataFromLocalStorage() {
+            try {
+                const data = localStorage.getItem('aeroseal_job_data');
+                if (data) {
+                    return JSON.parse(data);
+                }
+            } catch (e) {
+                console.error('Error loading job data from localStorage:', e);
+            }
+            return null;
+        }
+
+        // Pre-fill Step 1 form with Step 0 data on page load
+        function prefillFromStep0() {
+            const jobData = loadJobDataFromLocalStorage();
+
+            if (jobData && jobData.step0 && jobData.step0.buildingInfo) {
+                const buildingInfo = jobData.step0.buildingInfo;
+                const assessment = jobData.step0.assessment;
+
+                // Pre-fill building information fields
+                if (buildingInfo.buildingType && document.getElementById('buildingType')) {
+                    document.getElementById('buildingType').value = buildingInfo.buildingType;
+                }
+                if (buildingInfo.sqft && document.getElementById('sqft')) {
+                    document.getElementById('sqft').value = buildingInfo.sqft;
+                }
+                if (buildingInfo.yearBuilt && document.getElementById('yearBuilt')) {
+                    document.getElementById('yearBuilt').value = buildingInfo.yearBuilt;
+                }
+                if (buildingInfo.floors && document.getElementById('floors')) {
+                    document.getElementById('floors').value = buildingInfo.floors;
+                }
+
+                console.log('✅ Pre-filled Step 1 with Step 0 data:', buildingInfo);
+
+                // Show notification with assessment summary
+                showStep0Notification(assessment);
+            }
+        }
+
+        // Show notification that Step 0 data was loaded
+        function showStep0Notification(assessment) {
+            if (!assessment) return;
+
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 20px 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+                z-index: 10000;
+                max-width: 350px;
+                animation: slideIn 0.3s ease;
+            `;
+
+            notification.innerHTML = `
+                <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">
+                    🧠 Step 0 Data Loaded!
+                </div>
+                <div style="font-size: 13px; opacity: 0.95; line-height: 1.5;">
+                    Building info pre-filled<br>
+                    Pricing multiplier: <strong>${assessment.price_multiplier}x</strong><br>
+                    Complexity: <strong>${assessment.complexity_score}/10</strong><br>
+                    Risk: <strong>${assessment.risk_level}</strong>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 6000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Run prefill when navigating to Step 1
+        const originalGoToStep = goToStep;
+        goToStep = function(stepNumber) {
+            originalGoToStep(stepNumber);
+
+            // If navigating to Step 1, check for Step 0 data
+            if (stepNumber === 1) {
+                setTimeout(prefillFromStep0, 100);
+            }
+        };
+
+        // Also check on initial page load if we're on Step 1
+        window.addEventListener('load', () => {
+            const currentStep = document.querySelector('.step-content.active');
+            if (currentStep && currentStep.id === 'step1') {
+                prefillFromStep0();
             }
         });
     </script>
