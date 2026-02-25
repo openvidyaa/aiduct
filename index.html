@@ -1190,6 +1190,15 @@
 
         // Also check on initial page load if we're on Step 1
         window.addEventListener('load', () => {
+            // Check for URL hash (e.g., #step1)
+            const hash = window.location.hash;
+            if (hash) {
+                const stepNum = hash.replace('#step', '');
+                if (!isNaN(stepNum)) {
+                    goToStep(parseInt(stepNum));
+                }
+            }
+
             const currentStep = document.querySelector('.step-content.active');
             if (currentStep && currentStep.id === 'step1') {
                 prefillFromStep0();

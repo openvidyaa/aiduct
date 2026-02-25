@@ -521,6 +521,30 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Next Step Action -->
+            <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 2px solid #e5e7eb;">
+                <p style="color: #065f46; font-size: 14px; margin-bottom: 15px; font-weight: 600;">
+                    ✅ Assessment complete! Your job data has been saved.
+                </p>
+                <button id="proceedToStep1Btn" style="
+                    padding: 16px 40px;
+                    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 17px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                ">
+                    📋 Proceed to Step 1: Generate Proposal →
+                </button>
+                <p style="color: #6b7280; font-size: 12px; margin-top: 12px;">
+                    Building data will be automatically pre-filled
+                </p>
+            </div>
         </div>
     </div>
 
@@ -820,6 +844,28 @@
             }
         `;
         document.head.appendChild(style);
+
+        // Proceed to Step 1 button
+        document.addEventListener('DOMContentLoaded', () => {
+            const proceedBtn = document.getElementById('proceedToStep1Btn');
+            if (proceedBtn) {
+                // Add hover effect
+                proceedBtn.addEventListener('mouseenter', () => {
+                    proceedBtn.style.transform = 'translateY(-2px)';
+                    proceedBtn.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.4)';
+                });
+                proceedBtn.addEventListener('mouseleave', () => {
+                    proceedBtn.style.transform = 'translateY(0)';
+                    proceedBtn.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
+                });
+
+                // Navigate to Step 1
+                proceedBtn.addEventListener('click', () => {
+                    // Navigate to index.html and go to Step 1
+                    window.location.href = 'index.html#step1';
+                });
+            }
+        });
     </script>
 </body>
 </html>
