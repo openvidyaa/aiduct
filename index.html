@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aeroseal ProposalAI - Generate Professional Energy Savings Proposals</title>
+    <title>Aeroseal Job Management - Complete Lifecycle Platform</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 16px;
@@ -27,40 +27,140 @@
             overflow: hidden;
         }
 
+        /* Header */
         .header {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 30px;
             text-align: center;
         }
 
         .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 28px;
+            margin-bottom: 8px;
             font-weight: 700;
         }
 
         .header .tagline {
-            font-size: 16px;
+            font-size: 15px;
             opacity: 0.9;
         }
 
-        .header .logo {
-            font-size: 48px;
-            margin-bottom: 15px;
+        /* Progress Stepper */
+        .progress-stepper {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 20px;
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+            overflow-x: auto;
         }
 
-        .form-container {
+        .step {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 0;
+        }
+
+        .step.completed:not(:last-child)::after {
+            background: #10b981;
+        }
+
+        .step.active:not(:last-child)::after {
+            background: linear-gradient(to right, #10b981 50%, #e5e7eb 50%);
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 700;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed .step-circle {
+            background: #10b981;
+            color: white;
+        }
+
+        .step.active .step-circle {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-label {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .step.active .step-label {
+            color: #3b82f6;
+        }
+
+        .step.completed .step-label {
+            color: #10b981;
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
             padding: 40px 30px;
         }
 
+        .step-content.active {
+            display: block;
+        }
+
+        .step-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .step-header h2 {
+            font-size: 26px;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .step-header p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* Form Styles (for Step 1) */
         .form-section {
             margin-bottom: 35px;
         }
 
-        .form-section h2 {
+        .form-section h3 {
             color: #1e3a8a;
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #e5e7eb;
@@ -108,37 +208,108 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            border: none;
+        /* Placeholder Step Styles */
+        .placeholder-content {
+            text-align: center;
+            padding: 60px 20px;
+            background: #f9fafb;
             border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border: 2px dashed #e5e7eb;
         }
 
-        .generate-btn:hover {
+        .placeholder-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .placeholder-content h3 {
+            font-size: 22px;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+
+        .placeholder-content p {
+            color: #6b7280;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 25px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            color: #374151;
+            font-size: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .feature-list li:before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
         }
 
-        .generate-btn:active {
-            transform: translateY(0);
-        }
-
-        .generate-btn:disabled {
+        .btn-primary:disabled {
             background: #9ca3af;
             cursor: not-allowed;
             transform: none;
         }
 
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        /* Loading & Result (Step 1) */
         .loading {
             display: none;
             text-align: center;
@@ -169,7 +340,9 @@
             padding: 40px 30px;
             text-align: center;
             background: #f0fdf4;
-            border-top: 4px solid #10b981;
+            border-radius: 12px;
+            border: 2px solid #10b981;
+            margin-top: 30px;
         }
 
         .result.active {
@@ -178,13 +351,8 @@
 
         .result h3 {
             color: #065f46;
-            font-size: 24px;
+            font-size: 22px;
             margin-bottom: 15px;
-        }
-
-        .result p {
-            color: #047857;
-            margin-bottom: 25px;
         }
 
         .download-btn {
@@ -197,12 +365,38 @@
             font-weight: 600;
             font-size: 16px;
             transition: all 0.3s ease;
+            margin-top: 15px;
         }
 
         .download-btn:hover {
             background: #059669;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .preview-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .stat-card .number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
         }
 
         .error {
@@ -219,73 +413,118 @@
             display: block;
         }
 
+        /* Mobile Responsive */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .header .tagline {
+                font-size: 13px;
+            }
+
+            .progress-stepper {
+                padding: 20px 10px;
+                gap: 5px;
+            }
+
+            .step {
+                min-width: 80px;
+            }
+
+            .step-circle {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .step-label {
+                font-size: 9px;
+            }
+
+            .step-content {
+                padding: 25px 15px;
+            }
+
             .form-row {
                 grid-template-columns: 1fr;
             }
 
-            .header h1 {
-                font-size: 24px;
+            .preview-stats {
+                grid-template-columns: 1fr;
             }
 
-            .form-container {
-                padding: 30px 20px;
+            .step-actions {
+                flex-direction: column;
             }
-        }
 
-        .info-text {
-            font-size: 13px;
-            color: #6b7280;
-            margin-top: 5px;
-            font-style: italic;
-        }
-
-        .preview-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #e5e7eb;
-        }
-
-        .stat-card {
-            background: #f9fafb;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-card .number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1e3a8a;
-            margin-bottom: 5px;
-        }
-
-        .stat-card .label {
-            font-size: 12px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <div class="logo">🏠</div>
-            <h1>Aeroseal ProposalAI</h1>
-            <p class="tagline">Generate professional energy savings proposals in 15 minutes</p>
+            <h1>🏠 Aeroseal Job Management Platform</h1>
+            <p class="tagline">Complete lifecycle management from proposal to completion certificate</p>
         </div>
 
-        <div class="form-container">
+        <!-- Progress Stepper -->
+        <div class="progress-stepper">
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Generate<br>Proposal</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Pre-Job<br>Checklist</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Before<br>Measurements</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Live Process<br>Tracker</div>
+            </div>
+            <div class="step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Photo<br>Documentation</div>
+            </div>
+            <div class="step" data-step="6">
+                <div class="step-circle">6</div>
+                <div class="step-label">After<br>Measurements</div>
+            </div>
+            <div class="step" data-step="7">
+                <div class="step-circle">7</div>
+                <div class="step-label">AI Report<br>Generator</div>
+            </div>
+            <div class="step" data-step="8">
+                <div class="step-circle">8</div>
+                <div class="step-label">Certificate &<br>Delivery</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Generate Proposal (WORKING) -->
+        <div class="step-content active" id="step1">
+            <div class="step-header">
+                <h2>📋 Step 1: Generate Professional Proposal</h2>
+                <p>Create AI-powered energy savings proposals in minutes</p>
+            </div>
+
             <div id="error" class="error"></div>
 
             <form id="proposalForm">
                 <!-- Building Information -->
                 <div class="form-section">
-                    <h2>📋 Building Information</h2>
+                    <h3>📋 Building Information</h3>
                     <div class="form-row">
                         <div class="form-group full-width">
                             <label for="address">Property Address *</label>
@@ -325,7 +564,7 @@
 
                 <!-- HVAC System -->
                 <div class="form-section">
-                    <h2>❄️ HVAC System Information</h2>
+                    <h3>❄️ HVAC System Information</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="hvacAge">HVAC System Age (years) *</label>
@@ -357,7 +596,7 @@
 
                 <!-- Duct Information -->
                 <div class="form-section">
-                    <h2>🔧 Duct System Details</h2>
+                    <h3>🔧 Duct System Details</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="ductLocation">Duct Location *</label>
@@ -372,21 +611,19 @@
                         </div>
                         <div class="form-group">
                             <label for="knownIssues">Known Issues</label>
-                            <select id="knownIssues" name="knownIssues" multiple size="1">
+                            <select id="knownIssues" name="knownIssues">
+                                <option value="">None</option>
                                 <option value="Uneven temperatures">Uneven temperatures</option>
                                 <option value="High energy bills">High energy bills</option>
                                 <option value="Excessive dust">Excessive dust</option>
-                                <option value="Poor air quality">Poor air quality</option>
-                                <option value="Rooms hard to heat/cool">Rooms hard to heat/cool</option>
                             </select>
-                            <p class="info-text">Select if applicable</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Customer Information -->
                 <div class="form-section">
-                    <h2>👤 Customer Information</h2>
+                    <h3>👤 Customer Information</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="customerName">Property Owner Name *</label>
@@ -405,21 +642,23 @@
                     </div>
                 </div>
 
-                <button type="submit" class="generate-btn" id="generateBtn">
-                    Generate Professional Proposal
-                </button>
+                <div class="step-actions">
+                    <button type="submit" class="btn btn-primary" id="generateBtn">
+                        Generate Professional Proposal
+                    </button>
+                </div>
             </form>
 
             <div id="loading" class="loading">
                 <div class="spinner"></div>
                 <h3 style="color: #1e3a8a; margin-bottom: 10px;">Generating Your Proposal...</h3>
-                <p style="color: #6b7280;">AI is calculating energy savings, researching incentives, and creating a professional document</p>
+                <p id="loadingMessage" style="color: #6b7280;">AI is calculating energy savings...</p>
             </div>
 
             <div id="result" class="result">
                 <h3>✅ Proposal Generated Successfully!</h3>
-                <p>Your professional Aeroseal proposal is ready to download and share with your customer.</p>
-                <a href="#" id="downloadBtn" class="download-btn" download>📄 Download PDF Proposal</a>
+                <p>Your professional Aeroseal proposal is ready to download.</p>
+                <a href="#" id="downloadBtn" class="download-btn">📄 Download PDF Proposal</a>
                 <div class="preview-stats" id="previewStats" style="display: none;">
                     <div class="stat-card">
                         <div class="number" id="statSavings">$0</div>
@@ -436,9 +675,286 @@
                 </div>
             </div>
         </div>
+
+        <!-- Step 2: Pre-Job Checklist (PLACEHOLDER) -->
+        <div class="step-content" id="step2">
+            <div class="step-header">
+                <h2>✅ Step 2: Pre-Job Safety Checklist</h2>
+                <p>Ensure all safety requirements and equipment are ready</p>
+            </div>
+
+            <div class="placeholder-content">
+                <div class="placeholder-icon">🛡️</div>
+                <h3>Pre-Job Checklist Module</h3>
+                <p>Digital safety verification and equipment readiness</p>
+
+                <ul class="feature-list">
+                    <li>Safety equipment verification (PPE, ventilation, fire extinguisher)</li>
+                    <li>Customer walkthrough and expectations setting</li>
+                    <li>Equipment inventory check (Aeroseal machine, hoses, sealant)</li>
+                    <li>Site access and workspace preparation</li>
+                    <li>Photo documentation of initial site conditions</li>
+                    <li>Digital signature collection from property owner</li>
+                </ul>
+
+                <span class="coming-soon-badge">🚧 Coming Soon</span>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+                <button class="btn btn-primary" onclick="goToStep(3)">Next Step →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Before Measurements (PLACEHOLDER) -->
+        <div class="step-content" id="step3">
+            <div class="step-header">
+                <h2>📏 Step 3: Before Measurements</h2>
+                <p>Capture baseline duct leakage and system performance</p>
+            </div>
+
+            <div class="placeholder-content">
+                <div class="placeholder-icon">📊</div>
+                <h3>Baseline Measurement Module</h3>
+                <p>Record all pre-sealing system diagnostics</p>
+
+                <ul class="feature-list">
+                    <li>Total duct leakage in CFM (Cubic Feet per Minute)</li>
+                    <li>System operating pressure measurements</li>
+                    <li>Temperature readings at supply and return vents</li>
+                    <li>Airflow measurements by room/zone</li>
+                    <li>Infrared thermal imaging capture points</li>
+                    <li>Auto-calculation of leakage percentage</li>
+                </ul>
+
+                <span class="coming-soon-badge">🚧 Coming Soon</span>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+                <button class="btn btn-primary" onclick="goToStep(4)">Next Step →</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Live Process Tracker (PLACEHOLDER) -->
+        <div class="step-content" id="step4">
+            <div class="step-header">
+                <h2>⚙️ Step 4: Live Aeroseal Process Tracker</h2>
+                <p>Monitor the 6-step sealing process in real-time</p>
+            </div>
+
+            <div class="placeholder-content">
+                <div class="placeholder-icon">⏱️</div>
+                <h3>Real-Time Process Monitor</h3>
+                <p>Track each phase with timestamps and technician notes</p>
+
+                <ul class="feature-list">
+                    <li>Step 1: Register sealing & system preparation (30 min)</li>
+                    <li>Step 2: System pressurization & baseline test (20 min)</li>
+                    <li>Step 3: Aerosol injection begins (1-2 hours)</li>
+                    <li>Step 4: Active sealing & leak reduction monitoring (2-4 hours)</li>
+                    <li>Step 5: Final verification & post-test (30 min)</li>
+                    <li>Step 6: System restoration & cleanup (45 min)</li>
+                    <li>Live CFM reduction graph visualization</li>
+                    <li>SMS updates to customer at each milestone</li>
+                </ul>
+
+                <span class="coming-soon-badge">🚧 Coming Soon</span>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
+                <button class="btn btn-primary" onclick="goToStep(5)">Next Step →</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Photo Documentation (PLACEHOLDER) -->
+        <div class="step-content" id="step5">
+            <div class="step-header">
+                <h2>📸 Step 5: Photo Documentation</h2>
+                <p>Upload and organize before/during/after photos</p>
+            </div>
+
+            <div class="placeholder-content">
+                <div class="placeholder-icon">📷</div>
+                <h3>Visual Documentation System</h3>
+                <p>Mobile-friendly photo capture with automatic organization</p>
+
+                <ul class="feature-list">
+                    <li>Before: Duct system, equipment, workspace photos</li>
+                    <li>During: Aeroseal machine setup, sealing in progress</li>
+                    <li>After: Sealed vents, completed work, clean workspace</li>
+                    <li>Automatic timestamp and GPS tagging</li>
+                    <li>Upload from mobile camera or photo library</li>
+                    <li>AI-powered photo quality checks</li>
+                </ul>
+
+                <span class="coming-soon-badge">🚧 Coming Soon</span>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" onclick="goToStep(4)">← Back</button>
+                <button class="btn btn-primary" onclick="goToStep(6)">Next Step →</button>
+            </div>
+        </div>
+
+        <!-- Step 6: After Measurements (PLACEHOLDER) -->
+        <div class="step-content" id="step6">
+            <div class="step-header">
+                <h2>📈 Step 6: After Measurements & Results</h2>
+                <p>Document post-sealing performance improvements</p>
+            </div>
+
+            <div class="placeholder-content">
+                <div class="placeholder-icon">✅</div>
+                <h3>Post-Sealing Verification</h3>
+                <p>Capture final measurements and calculate improvements</p>
+
+                <ul class="feature-list">
+                    <li>Final duct leakage CFM measurement</li>
+                    <li>Post-sealing system pressure readings</li>
+                    <li>Auto-calculation of % leakage reduction</li>
+                    <li>Before/after comparison charts</li>
+                    <li>Energy savings projections based on actual results</li>
+                    <li>Pass/fail verification (minimum 90% sealing recommended)</li>
+                </ul>
+
+                <span class="coming-soon-badge">🚧 Coming Soon</span>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" onclick="goToStep(5)">← Back</button>
+                <button class="btn btn-primary" onclick="goToStep(7)">Next Step →</button>
+            </div>
+        </div>
+
+        <!-- Step 7: AI Report Generator (PLACEHOLDER) -->
+        <div class="step-content" id="step7">
+            <div class="step-header">
+                <h2>📄 Step 7: AI-Powered Completion Report</h2>
+                <p>Generate professional job completion documentation</p>
+            </div>
+
+            <div class="placeholder-content">
+                <div class="placeholder-icon">🤖</div>
+                <h3>Intelligent Report Generation</h3>
+                <p>AI creates comprehensive reports from all collected data</p>
+
+                <ul class="feature-list">
+                    <li>Executive summary with before/after results</li>
+                    <li>Complete measurement data tables and charts</li>
+                    <li>Photo gallery with before/during/after sections</li>
+                    <li>Energy savings analysis and ROI validation</li>
+                    <li>Technician notes and observations</li>
+                    <li>Professional branded PDF with customer letterhead</li>
+                </ul>
+
+                <span class="coming-soon-badge">🚧 Coming Soon</span>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" onclick="goToStep(6)">← Back</button>
+                <button class="btn btn-primary" onclick="goToStep(8)">Next Step →</button>
+            </div>
+        </div>
+
+        <!-- Step 8: Certificate & Delivery (PLACEHOLDER) -->
+        <div class="step-content" id="step8">
+            <div class="step-header">
+                <h2>🎖️ Step 8: Official Certificate & Delivery</h2>
+                <p>Issue Aeroseal certification and deliver all documents</p>
+            </div>
+
+            <div class="placeholder-content">
+                <div class="placeholder-icon">🏆</div>
+                <h3>Certification & Customer Delivery</h3>
+                <p>Automated document delivery and warranty activation</p>
+
+                <ul class="feature-list">
+                    <li>Official Aeroseal completion certificate generation</li>
+                    <li>Warranty documentation and registration</li>
+                    <li>Automated email delivery to customer</li>
+                    <li>SMS notification with document links</li>
+                    <li>Customer portal access for future reference</li>
+                    <li>Integration with CRM for follow-up scheduling</li>
+                </ul>
+
+                <span class="coming-soon-badge">🚧 Coming Soon</span>
+            </div>
+
+            <div class="step-actions">
+                <button class="btn btn-secondary" onclick="goToStep(7)">← Back</button>
+                <button class="btn btn-primary" onclick="alert('Lifecycle Complete! 🎉')">Complete Job</button>
+            </div>
+        </div>
     </div>
 
     <script>
+        // ⚙️ CONFIGURATION - Railway backend URL
+        const API_URL = 'https://aiduct-production.up.railway.app';
+
+        // Step Navigation
+        function goToStep(stepNumber) {
+            // Hide all step contents
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+                step.classList.remove('completed');
+            });
+
+            // Show selected step content
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+
+            // Update stepper
+            document.querySelectorAll('.step').forEach((step, index) => {
+                if (index + 1 < stepNumber) {
+                    step.classList.add('completed');
+                } else if (index + 1 === stepNumber) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Click on step circles to navigate
+        document.querySelectorAll('.step').forEach(step => {
+            step.addEventListener('click', () => {
+                const stepNum = parseInt(step.getAttribute('data-step'));
+                goToStep(stepNum);
+            });
+        });
+
+        // Proposal Form Logic (Step 1 - WORKING)
+        const loadingMessages = [
+            "Analyzing building specifications and energy usage patterns...",
+            "Calculating potential duct leakage based on building age...",
+            "AI is estimating annual energy savings...",
+            "Computing ROI and payback periods...",
+            "Researching local energy incentives and rebates...",
+            "Calculating environmental impact and CO₂ reduction...",
+            "Generating executive summary and value proposition...",
+            "Creating professional PDF proposal with charts...",
+            "Finalizing 10-year financial projections...",
+            "Almost done! Compiling your personalized proposal..."
+        ];
+
+        let loadingMessageIndex = 0;
+        let loadingInterval = null;
+
+        function rotateLoadingMessages() {
+            const messageEl = document.getElementById('loadingMessage');
+            if (messageEl) {
+                messageEl.textContent = loadingMessages[loadingMessageIndex];
+                loadingMessageIndex = (loadingMessageIndex + 1) % loadingMessages.length;
+            }
+        }
+
         document.getElementById('proposalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -454,8 +970,13 @@
             document.getElementById('loading').classList.add('active');
             document.getElementById('generateBtn').disabled = true;
 
+            // Start rotating loading messages
+            loadingMessageIndex = 0;
+            rotateLoadingMessages();
+            loadingInterval = setInterval(rotateLoadingMessages, 3000);
+
             try {
-                const response = await fetch('/api/generate-proposal', {
+                const response = await fetch(`${API_URL}/api/generate-proposal`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -469,14 +990,20 @@
 
                 const result = await response.json();
 
+                // Stop loading messages
+                clearInterval(loadingInterval);
+
                 // Hide loading
                 document.getElementById('loading').classList.remove('active');
 
                 // Show result
                 document.getElementById('result').classList.add('active');
-                document.getElementById('downloadBtn').href = result.pdf_url;
 
-                // Show stats if available
+                // Set download link
+                const pdfUrl = result.pdf_url.startsWith('http') ? result.pdf_url : `${API_URL}${result.pdf_url}`;
+                document.getElementById('downloadBtn').href = pdfUrl;
+
+                // Show stats
                 if (result.stats) {
                     document.getElementById('previewStats').style.display = 'grid';
                     document.getElementById('statSavings').textContent = '$' + result.stats.annual_savings.toLocaleString();
@@ -487,7 +1014,13 @@
                 // Scroll to result
                 document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
 
+                // Re-enable button
+                document.getElementById('generateBtn').disabled = false;
+
             } catch (error) {
+                // Stop loading messages
+                clearInterval(loadingInterval);
+
                 document.getElementById('loading').classList.remove('active');
                 const errorDiv = document.getElementById('error');
                 errorDiv.textContent = 'Error: ' + error.message + '. Please try again or contact support.';
